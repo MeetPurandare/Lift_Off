@@ -1,45 +1,31 @@
 using UnityEngine;
-using System.Collections;
 
-public class Dice roll: MonoBehaviour
+public class DiceRoll : MonoBehaviour
 {
-    public int diceCount;
-    public static Dice roll Instance;
+    // Rigidbody of the dice
+    private Rigidbody rb;
 
-    internal Vector3 initPos;
+    // Start is called before the first frame update
     void Start()
     {
-        GetComponent<Rigidbody>().solverIterations = 250;
-        Instance = this;
-        initPos = transform.position;
+        // Get the Rigidbody component
+        rb = GetComponent<Rigidbody>();
     }
 
-    void OnEnable()
+    // Update is called once per frame
+    void Update()
     {
-        initPos = transform.position;
+        // Check for input to roll the dice
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            RollDice();
+        }
     }
 
-    public int GetDiceCount()
+    // Roll the dice
+    void RollDice()
     {
-        diceCount = 0;
-        regularDiceCount();
-        return diceCount;
-    }
-
-    void regularDiceCount()
-    {
-        if (Vector3.Dot(transform.forward, Vector3.up) > 0.6f)
-            diceCount = 5;
-        if (Vector3.Dot(-transform.forward, Vector3.up) > 0.6f)
-            diceCount = 2;
-        if (Vector3.Dot(transform.up, Vector3.up) > 0.6f)
-            diceCount = 3;
-        if (Vector3.Dot(-transform.up, Vector3.up) > 0.6f)
-            diceCount = 4;
-        if (Vector3.Dot(transform.right, Vector3.up) > 0.6f)
-            diceCount = 6;
-        if (Vector3.Dot(-transform.right, Vector3.up) > 0.6f)
-            diceCount = 1;
-
+        // Add a random force to the dice
+        rb.AddForce(Random.insideUnitSphere * 300, ForceMode.Impulse);
     }
 }
